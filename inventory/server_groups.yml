@@ -11,3 +11,4 @@ hypervisor:
     cloud_init_user: murat
     cloud_init_password: murat
     cloud_init_ip: '192.168.1.135/24'
+    cloud_init_gw: '192.168.1.1'

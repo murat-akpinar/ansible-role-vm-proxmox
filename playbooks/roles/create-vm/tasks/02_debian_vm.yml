@@ -38,8 +38,8 @@
   args:
     executable: /bin/bash
 
-- name: Set cloud-init IP configuration
-  shell: qm set 131 --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }}"
+- name: Set cloud-init IP and gateway configuration
+  shell: qm set 131 --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }},gw={{ hostvars['proxmox']['cloud_init_gw'] }}"
   args:
     executable: /bin/bash
 
