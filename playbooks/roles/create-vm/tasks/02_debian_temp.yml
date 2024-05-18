@@ -1,8 +1,8 @@
 # Debian 11 Template
 ---
 
-- name: Check if VM ID 130 exists
-  shell: qm list | grep -q ' 130 '
+- name: Check if VM ID 452 exists
+  shell: qm list | grep -q ' 452 '
   register: vm_exists
   ignore_errors: true
   changed_when: false
@@ -21,32 +21,32 @@
       when: not debian_image.stat.exists
 
     - name: Create a new VM
-      shell: qm create 130 --name debian11-template --memory 1024 --net0 virtio,bridge=vmbr0
+      shell: qm create 452 --name debian11-template --memory 1024 --net0 virtio,bridge=vmbr0
       args:
         executable: /bin/bash
 
     - name: Import disk to Proxmox
-      shell: qm importdisk 130 /var/lib/vz/template/iso/debian-11-generic-amd64.qcow2 local-lvm
+      shell: qm importdisk 452 /var/lib/vz/template/iso/debian-11-generic-amd64.qcow2 local-lvm
       args:
         executable: /bin/bash
 
     - name: Set VM SCSI hardware
-      shell: qm set 130 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-130-disk-0
+      shell: qm set 452 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-452-disk-0
       args:
         executable: /bin/bash
 
     - name: Set cloud-init drive
-      shell: qm set 130 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0 --ipconfig0 ip=dhcp
+      shell: qm set 452 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0 --ipconfig0 ip=dhcp
       args:
         executable: /bin/bash
 
     - name: Resize the disk
-      shell: qm resize 130 scsi0 +8G
+      shell: qm resize 452 scsi0 +8G
       args:
         executable: /bin/bash
 
     - name: Convert VM to template
-      shell: qm template 130
+      shell: qm template 452
       args:
         executable: /bin/bash
   when: vm_exists.rc != 0

@@ -8,7 +8,7 @@
   changed_when: false
 
 - name: Clone VM from template if not exists
-  shell: qm clone 130 131 --name debian --full true
+  shell: qm clone 452 131 --name debian --full true
   args:
     executable: /bin/bash
   when: vm_exists.rc != 0
