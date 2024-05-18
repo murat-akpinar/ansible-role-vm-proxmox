@@ -1,0 +1,5 @@
+# Steps by Step
+---
+
+- name: "Create A Virtual Machine Ubuntu VM" 
+  ansible.builtin.import_tasks: 01_ubuntu_vm.yml
