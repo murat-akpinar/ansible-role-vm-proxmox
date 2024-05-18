@@ -8,7 +8,7 @@
   changed_when: false
 
 - name: Clone VM from template if not exists
-  shell: qm clone 452 132 --name debian --full true
+  shell: qm clone 121 132 --name ubuntu --full true
   args:
     executable: /bin/bash
   when: vm_exists.rc != 0
@@ -46,12 +46,12 @@
 - name: Copy SSH public key to Proxmox server under user directory
   copy:
     src: files/ssh_key.pub
-    dest: "/root/debian_key.pub"
+    dest: "/root/ubuntu_key.pub"
     owner: root
     group: root
     mode: '0644'
 
 - name: Set SSH public key for the VM using cloud-init
-  shell: qm set 132 --sshkey /root/debian_key.pub
+  shell: qm set 132 --sshkey /root/ubuntu_key.pub
   args:
     executable: /bin/bash
