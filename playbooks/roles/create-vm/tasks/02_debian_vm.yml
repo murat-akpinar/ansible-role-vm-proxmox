@@ -1,42 +1,21 @@
+# Debian 11 Template
 ---
-- name: Check if the Debian image is already downloaded
-  stat:
-    path: "/var/lib/vz/template/iso/debian-11-generic-amd64.qcow2"
-  register: debian_image
 
-- name: Download Debian image
-  get_url:
-    url: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
-    dest: "/var/lib/vz/template/iso/debian-11-generic-amd64.qcow2"
-    timeout: 60
-  when: not debian_image.stat.exists
+    - name: Clone VM from template
+      shell: qm clone 130 131 --name vm-from-template --full true
+      args:
+        executable: /bin/bash
 
-- name: Create a new VM
-  shell: qm create 130 --name debian11-template --memory 1024 --net0 virtio,bridge=vmbr0
-  args:
-    executable: /bin/bash
+    - name: Set VM cloud-init configuration
+      shell: |
+        qm set 131 --ciuser "{{ hostvars['proxmox']['cloud_init_user'] }}" \
+                  --cipassword "{{ hostvars['proxmox']['cloud_init_password'] }}" \
+                  --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }}" \
+                  --sshkeys /path/to/public_keys.pub
+      args:
+        executable: /bin/bash
 
-- name: Import disk to Proxmox
-  shell: qm importdisk 130 /var/lib/vz/template/iso/debian-11-generic-amd64.qcow2 local-lvm
-  args:
-    executable: /bin/bash
-
-- name: Set VM SCSI hardware
-  shell: qm set 130 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-130-disk-0
-  args:
-    executable: /bin/bash
-
-- name: Set cloud-init drive
-  shell: qm set 130 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0 --ipconfig0 ip=dhcp
-  args:
-    executable: /bin/bash
-
-- name: Resize the disk
-  shell: qm resize 130 scsi0 +8G
-  args:
-    executable: /bin/bash
-
-- name: Convert VM to template
-  shell: qm template 130
-  args:
-    executable: /bin/bash
+    - name: Start the cloned VM
+      shell: qm start 131
+      args:
+        executable: /bin/bash
