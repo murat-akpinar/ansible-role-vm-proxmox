@@ -1,46 +1,46 @@
 ---
 
-    - name: Mevcut VM'leri kontrol et
-      shell: qm list
-      register: vm_list
-      ignore_errors: true
+- name: Mevcut VM'leri kontrol et
+  shell: qm list
+  register: vm_list
+  ignore_errors: true
 
-    - name: Yeni VM oluştur
-      shell: "qm create {{ item }} --name ehkks{{ item }} --memory 2048 --sockets 2 --cores 2 --net0 virtio,bridge=vmbr0"
-      loop: [102, 103, 104]
-      when: not (item|string in vm_list.stdout)
-      args:
-        executable: /bin/bash
+- name: Yeni VM oluştur
+  shell: "qm create {{ item }} --name homelab{{ item }} --memory 2048 --sockets 2 --cores 2 --net0 virtio,bridge=vmbr0"
+  loop: [102, 103, 104]
+  when: not (item|string in vm_list.stdout)
+  args:
+    executable: /bin/bash
 
-    - name: ISO Image'dan disk import et
-      shell: "qm importdisk {{ item }} jammy-server-cloudimg-amd64.img local-lvm"
-      loop: [102, 103, 104]
-      when: not (item|string in vm_list.stdout)
-      args:
-        executable: /bin/bash
+- name: ISO'yu VM'e CD-ROM olarak ata
+  shell: "qm set {{ item }} --ide2 local:iso/jammy-server-cloudimg-amd64.img,media=cdrom"
+  loop: [102, 103, 104]
+  when: not (item|string in vm_list.stdout)
+  args:
+    executable: /bin/bash
 
-    - name: Diski VM'e ata
-      shell: "qm set {{ item }} --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-{{ item }}-disk-0"
-      loop: [102, 103, 104]
-      args:
-        executable: /bin/bash
+- name: Diski VM'e ata
+  shell: "qm set {{ item }} --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-{{ item }}-disk-0"
+  loop: [102, 103, 104]
+  args:
+    executable: /bin/bash
 
-    - name: Disk boyutunu ayarla
-      shell: "qm resize {{ item }} scsi0 +50G"
-      loop: [102, 103, 104]
-      args:
-        executable: /bin/bash
+- name: Disk boyutunu ayarla
+  shell: "qm resize {{ item }} scsi0 +50G"
+  loop: [102, 103, 104]
+  args:
+    executable: /bin/bash
 
-    - name: Network Ayarları
-      shell: |
-        qm set {{ item }} --net0 virtio,bridge=vmbr2,firewall=0
-      loop: [102, 103, 104]
-      args:
-        executable: /bin/bash
+- name: Network Ayarları
+  shell: |
+    qm set {{ item }} --net0 virtio,bridge=vmbr2,firewall=0
+  loop: [102, 103, 104]
+  args:
+    executable: /bin/bash
 
-    - name: VM başlat
-      shell: "qm start {{ item }}"
-      loop: [102, 103, 104]
-      args:
-        executable: /bin/bash
+- name: VM başlat
+  shell: "qm start {{ item }}"
+  loop: [102, 103, 104]
+  args:
+    executable: /bin/bash
 
