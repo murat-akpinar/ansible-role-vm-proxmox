@@ -11,5 +11,3 @@ hypervisor:
     cloud_init_user: murat
     cloud_init_password: murat
     cloud_init_ip: '192.168.1.135/24'
-    cloud_init_sshkey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDJtMnqGGbG/PzC86f47MQrVqSWvYM7zfHh6ol9sdbrIeCI8ZRv35d1GGq0qlL+He9Kxr5mjbaiWgkkMZsyHCkQqNSiN6kEdTUa7Jyhe6ve3Vgkps1a/RG/2+VDV8kTHGf7MclY2X0ICt1yhITvCfKZQrwlJth9c71mkqEJvVMFK3eBiOG4nAjUSAFuUqQQqFf184HJDGF6W+++MiVuS2iTY7ew29pBGFKq3qG7RqkjZ1PyhSDLp6kDfDKEBXAn4Zk4k913uV8P7FeC4Gj9gmnOuSIoC4V4ma+fopaEFlEE9wtjEJnOPG3CBJXOBsve+e8phrqPgrGoBil6sgWB/fqy60IBMmQZKn75t+tgCRSaTpvrN743/JzYRm0cnal+P+NTt+NrLGk1NXh5J2nS3sgxCkMnKEqkafYUFUo/UfOiSKUSG0a7TPmqYFrX8CxEQiGgPeX4E/8H7Lyai4jnA/iTRGeyV96D/snvhp8RCqMdYedgfm6hJX4XepPtxHcJ79M= murat@rocky'
-

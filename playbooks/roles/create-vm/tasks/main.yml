@@ -2,7 +2,7 @@
 ---
 
 - name: "Create A Debian Template" 
-  ansible.builtin.import_tasks: 02_debian_vm.yml
+  ansible.builtin.import_tasks: 02_debian_temp.yml
 
 - name: "Create A Debian Template" 
   ansible.builtin.import_tasks: 02_debian_vm.yml

@@ -1,21 +1,45 @@
-# Debian 11 Template
+# Debian 11 VM
 ---
 
-    - name: Clone VM from template
-      shell: qm clone 130 131 --name vm-from-template --full true
-      args:
-        executable: /bin/bash
+- name: Check if VM ID 131 already exists
+  shell: qm list | grep -q ' 131 '
+  register: vm_exists
+  ignore_errors: true
+  changed_when: false
 
-    - name: Set VM cloud-init configuration
-      shell: |
-        qm set 131 --ciuser "{{ hostvars['proxmox']['cloud_init_user'] }}" \
-                  --cipassword "{{ hostvars['proxmox']['cloud_init_password'] }}" \
-                  --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }}" \
-                  --sshkeys /path/to/public_keys.pub
-      args:
-        executable: /bin/bash
+- name: Clone VM from template if not exists
+  shell: qm clone 130 131 --name debian --full true
+  args:
+    executable: /bin/bash
+  when: vm_exists.rc != 0
 
-    - name: Start the cloned VM
-      shell: qm start 131
-      args:
-        executable: /bin/bash
+- name: Notify VM already exists
+  debug:
+    msg: "VM ID 131 already exists, skipping clone."
+  when: vm_exists.rc == 0
+
+- name: CPU Ayarları
+  shell: "qm set 131 --cores 1 --sockets 2 --memory 2048 --numa 1 --cpu host"
+  args:
+    executable: /bin/bash
+
+- name: Disk boyutunu ayarla
+  shell: "qm resize 131 scsi0 +50G"
+  args:
+    executable: /bin/bash
+
+- name: Set cloud-init user
+  shell: qm set 131 --ciuser "{{ hostvars['proxmox']['cloud_init_user'] }}"
+  args:
+    executable: /bin/bash
+
+- name: Set cloud-init password
+  shell: qm set 131 --cipassword "{{ hostvars['proxmox']['cloud_init_password'] }}"
+  args:
+    executable: /bin/bash
+
+- name: Set cloud-init IP configuration
+  shell: qm set 131 --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }}"
+  args:
+    executable: /bin/bash
+
