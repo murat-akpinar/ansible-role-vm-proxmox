@@ -18,12 +18,12 @@
     msg: "VM ID 131 already exists, skipping clone."
   when: vm_exists.rc == 0
 
-- name: CPU Ayarları
+- name: Set CPU Core
   shell: "qm set 131 --cores 1 --sockets 2 --memory 2048 --numa 1 --cpu host"
   args:
     executable: /bin/bash
 
-- name: Disk boyutunu ayarla
+- name: Set disk size
   shell: "qm resize 131 scsi0 +50G"
   args:
     executable: /bin/bash
