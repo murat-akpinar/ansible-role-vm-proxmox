@@ -46,12 +46,12 @@
 - name: Copy SSH public key to Proxmox server under user directory
   copy:
     src: files/ssh_key.pub
-    dest: "/root/.ssh/debian_key.pub"
+    dest: "/root/debian_key.pub"
     owner: root
     group: root
     mode: '0644'
 
 - name: Set SSH public key for the VM using cloud-init
-  shell: qm set 131 --sshkey /root/.ssh/debian_key.pub
+  shell: qm set 131 --sshkey /root/debian_key.pub
   args:
     executable: /bin/bash

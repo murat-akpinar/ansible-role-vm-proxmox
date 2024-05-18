@@ -36,7 +36,7 @@
         executable: /bin/bash
 
     - name: Set cloud-init drive
-      shell: qm set 452 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0 --ipconfig0 ip=dhcp
+      shell: qm set 452 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0
       args:
         executable: /bin/bash
 
