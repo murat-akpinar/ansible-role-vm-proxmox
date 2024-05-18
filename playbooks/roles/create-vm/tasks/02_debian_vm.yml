@@ -1,3 +1,82 @@
 ---
+- name: Check if the Debian image is already downloaded
+  stat:
+    path: "/var/lib/vz/images/iso/debian-11-generic-amd64.qcow2"
+  register: debian_image
 
+- name: Download Debian image
+  get_url:
+    url: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
+    dest: "/var/lib/vz/images/iso/debian-11-generic-amd64.qcow2"
+    timeout: 60
+  when: not debian_image.stat.exists
 
+- name: Create a new VM
+  community.general.proxmox_kvm:
+    node: pve
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_ip }}"
+    vmid: 130
+    name: debian11-template
+    memory: 1024
+    net: '{"net0":"virtio,bridge=vmbr0"}'
+    state: present
+
+- name: Import disk to Proxmox
+  community.general.proxmox_kvm:
+    node: pve
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_ip }}"
+    vmid: 130
+    storage: local-lvm
+    disk: "debian-11-generic-amd64.qcow2"
+    format: qcow2
+    state: "present"
+
+- name: Set VM SCSI hardware
+  community.general.proxmox_kvm:
+    node: pve
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_ip }}"
+    vmid: 130
+    scsihw: virtio-scsi-pci
+    scsi: "local-lvm:vm-130-disk-0"
+    state: present
+
+- name: Set cloud-init drive
+  community.general.proxmox_kvm:
+    node: pve
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_ip }}"
+    vmid: 130
+    ide2: "local-lvm:cloudinit"
+    boot: c
+    bootdisk: scsi0
+    serial0: socket
+    vga: serial0
+    ipconfig0: ip=dhcp
+    state: present
+
+- name: Resize the disk
+  community.general.proxmox_kvm:
+    node: pve
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_ip }}"
+    vmid: 130
+    disk_resize: '{"scsi0":"8G"}'
+    state: present
+
+- name: Convert VM to template
+  community.general.proxmox_kvm:
+    node: pve
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_ip }}"
+    vmid: 130
+    template: yes
+    state: present
