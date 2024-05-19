@@ -1,4 +1,4 @@
-# Ansible Create VM in Proxmox
+# Creating a Virtual Machine with Ansible in Proxmox
 
 Bu Ansible rolü, Proxmox üzerinde sanal makinelerin otomatik olarak oluşturulması ve yönetilmesi için kullanılır. Proxmox Virtual Environment (PVE) platformunu kullanarak VM'lerin kolayca dağıtılmasını ve konfigürasyonunun yapılmasını sağlar.
 
