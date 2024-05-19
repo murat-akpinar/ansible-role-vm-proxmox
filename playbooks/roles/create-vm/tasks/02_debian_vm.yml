@@ -18,7 +18,7 @@
     msg: "VM ID 131 already exists, skipping clone."
   when: vm_exists.rc == 0
 
-- name: Set CPU Core
+- name: Set CPU Core and RAM
   shell: "qm set 131 --cores 1 --sockets 2 --memory 2048 --numa 1 --cpu host"
   args:
     executable: /bin/bash
