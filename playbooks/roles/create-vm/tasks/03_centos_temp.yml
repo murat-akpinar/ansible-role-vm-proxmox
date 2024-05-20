@@ -9,32 +9,32 @@
 
 - block:
 
-    - name: Create a new VM
+    - name: Centos 7 Create a new VM
       shell: qm create 3514 --name centos7-template --memory 1024 --net0 virtio,bridge=vmbr0
       args:
         executable: /bin/bash
 
-    - name: Import disk to Proxmox
+    - name: Centos 7 Import disk to Proxmox
       shell: qm importdisk 3514 /var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2c local-lvm
       args:
         executable: /bin/bash
 
-    - name: Set VM SCSI hardware
+    - name: Centos 7 Set VM SCSI hardware
       shell: qm set 3514 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-3514-disk-0
       args:
         executable: /bin/bash
 
-    - name: Set cloud-init drive
+    - name: Centos 7 Set cloud-init drive
       shell: qm set 3514 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0
       args:
         executable: /bin/bash
 
-    - name: Resize the disk
+    - name: Centos 7 Resize the disk
       shell: qm resize 3514 scsi0 +8G
       args:
         executable: /bin/bash
 
-    - name: Convert VM to template
+    - name: Centos 7 Convert VM to template
       shell: qm template 3514
       args:
         executable: /bin/bash

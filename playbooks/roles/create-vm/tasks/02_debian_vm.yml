@@ -7,43 +7,43 @@
   ignore_errors: true
   changed_when: false
 
-- name: Clone VM from template if not exists
+- name: Debian 11 Clone VM from template if not exists
   shell: qm clone 452 453 --name debian --full true
   args:
     executable: /bin/bash
   when: vm_exists.rc != 0
 
-- name: Notify VM already exists
+- name: Debian 11 Notify VM already exists
   debug:
     msg: "VM ID 453 already exists, skipping clone."
   when: vm_exists.rc == 0
 
-- name: Set CPU Core and RAM
+- name: Debian 11 Set CPU Core and RAM
   shell: "qm set 453 --cores 1 --sockets 2 --memory 2048 --numa 1 --cpu host"
   args:
     executable: /bin/bash
 
-- name: Set disk size
+- name: Debian 11 Set disk size
   shell: "qm resize 453 scsi0 +50G"
   args:
     executable: /bin/bash
 
-- name: Set cloud-init user
+- name: Debian 11 Set cloud-init user
   shell: qm set 453 --ciuser "{{ hostvars['proxmox']['cloud_init_user'] }}"
   args:
     executable: /bin/bash
 
-- name: Set cloud-init password
+- name: Debian 11 Set cloud-init password
   shell: qm set 453 --cipassword "{{ hostvars['proxmox']['cloud_init_password'] }}"
   args:
     executable: /bin/bash
 
-- name: Set cloud-init IP and gateway configuration
+- name: Debian 11 Set cloud-init IP and gateway configuration
   shell: qm set 453 --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }},gw={{ hostvars['proxmox']['cloud_init_gw'] }}"
   args:
     executable: /bin/bash
 
-- name: Copy SSH public key to Proxmox server under user directory
+- name: Debian 11 Copy SSH public key to Proxmox server under user directory
   copy:
     src: files/ssh_key.pub
     dest: "/root/debian_key.pub"
@@ -51,7 +51,7 @@
     group: root
     mode: '0644'
 
-- name: Set SSH public key for the VM using cloud-init
+- name: Debian 11 Set SSH public key for the VM using cloud-init
   shell: qm set 453 --sshkey /root/debian_key.pub
   args:
     executable: /bin/bash

@@ -9,32 +9,32 @@
 
 - block:
 
-    - name: Create a new VM
+    - name: Ubuntu Create a new VM
       shell: qm create 121 --name Ubuntu-template --memory 1024 --net0 virtio,bridge=vmbr0
       args:
         executable: /bin/bash
 
-    - name: Import disk to Proxmox
+    - name: Ubuntu Import disk to Proxmox
       shell: qm importdisk 121 /var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img local-lvm
       args:
         executable: /bin/bash
 
-    - name: Set VM SCSI hardware
+    - name: Ubuntu Set VM SCSI hardware
       shell: qm set 121 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-121-disk-0
       args:
         executable: /bin/bash
 
-    - name: Set cloud-init drive
+    - name: Ubuntu Set cloud-init drive
       shell: qm set 121 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0
       args:
         executable: /bin/bash
 
-    - name: Resize the disk
+    - name: Ubuntu Resize the disk
       shell: qm resize 121 scsi0 +8G
       args:
         executable: /bin/bash
 
-    - name: Convert VM to template
+    - name: Ubuntu Convert VM to template
       shell: qm template 121
       args:
         executable: /bin/bash
