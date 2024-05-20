@@ -2,6 +2,7 @@
   set_fact:
     debian_iso_url: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
     ubuntu_iso_url: "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
+    centos_iso_url: "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2"
 
 - name: Check for Debian ISO image on Proxmox
   stat:
@@ -12,6 +13,7 @@
   copy:
     src: "files/debian-11-generic-amd64.qcow2"
     dest: "/var/lib/vz/template/iso/"
+  ignore_errors: true
   when: not debian_iso_stat.stat.exists
   notify: Log Debian ISO copied
 
@@ -27,15 +29,11 @@
     path: "/var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img"
   register: ubuntu_iso_stat
 
-- name: Check if Ubuntu ISO is in local files
-  stat:
-    path: "files/jammy-server-cloudimg-amd64-disk-kvm.img"
-  register: local_ubuntu_iso
-
 - name: Copy Ubuntu ISO from local files if present
   copy:
     src: "files/jammy-server-cloudimg-amd64-disk-kvm.img"
     dest: "/var/lib/vz/template/iso/"
+  ignore_errors: true
   when: not ubuntu_iso_stat.stat.exists
   notify: Log Ubuntu ISO copied
 
@@ -45,3 +43,23 @@
     dest: "/var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img"
   when: not ubuntu_iso_stat.stat.exists
   notify: Log Ubuntu ISO download
+
+- name: Check for Centos7 ISO image on Proxmox
+  stat:
+    path: "/var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2"
+  register: centos_iso_stat
+
+- name: Copy Centos7 ISO from local files if present
+  copy:
+    src: "files/CentOS-7-x86_64-GenericCloud.qcow2"
+    dest: "/var/lib/vz/template/iso/"
+  ignore_errors: true
+  when: not centos_iso_stat.stat.exists
+  notify: Log Centos7 ISO copied
+
+- name: Download Centos7 ISO if not found locally or on Proxmox
+  get_url:
+    url: "{{ ubuntu_iso_url }}"
+    dest: "/var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2"
+  when: not centos_iso_stat.stat.exists
+  notify: Log Centos7 ISO download

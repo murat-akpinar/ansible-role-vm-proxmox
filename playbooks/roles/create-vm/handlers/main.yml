@@ -15,3 +15,11 @@
 - name: Log Ubuntu ISO download
   debug:
     msg: "Ubuntu ISO has been successfully downloaded from the internet to Proxmox."
+
+- name: Log Centos7 ISO copied
+  debug:
+    msg: "Centos7 ISO has been successfully copied from local files to Proxmox."
+
+- name: Log Centos7 ISO download
+  debug:
+    msg: "Centos7 ISO has been successfully downloaded from the internet to Proxmox."

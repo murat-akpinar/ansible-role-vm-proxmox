@@ -1,45 +1,45 @@
 # Ubuntu 22 VM
 ---
 
-- name: Check if VM ID 132 already exists
-  shell: qm list | grep -q ' 132 '
+- name: Check if VM ID 122 already exists
+  shell: qm list | grep -q ' 122 '
   register: vm_exists
   ignore_errors: true
   changed_when: false
 
 - name: Clone VM from template if not exists
-  shell: qm clone 121 132 --name ubuntu --full true
+  shell: qm clone 121 122 --name ubuntu --full true
   args:
     executable: /bin/bash
   when: vm_exists.rc != 0
 
 - name: Notify VM already exists
   debug:
-    msg: "VM ID 132 already exists, skipping clone."
+    msg: "VM ID 122 already exists, skipping clone."
   when: vm_exists.rc == 0
 
 - name: Set CPU Core and RAM
-  shell: "qm set 132 --cores 1 --sockets 2 --memory 2048 --numa 1 --cpu host"
+  shell: "qm set 122 --cores 1 --sockets 2 --memory 2048 --numa 1 --cpu host"
   args:
     executable: /bin/bash
 
 - name: Set disk size
-  shell: "qm resize 132 scsi0 +50G"
+  shell: "qm resize 122 scsi0 +50G"
   args:
     executable: /bin/bash
 
 - name: Set cloud-init user
-  shell: qm set 132 --ciuser "{{ hostvars['proxmox']['cloud_init_user'] }}"
+  shell: qm set 122 --ciuser "{{ hostvars['proxmox']['cloud_init_user'] }}"
   args:
     executable: /bin/bash
 
 - name: Set cloud-init password
-  shell: qm set 132 --cipassword "{{ hostvars['proxmox']['cloud_init_password'] }}"
+  shell: qm set 122 --cipassword "{{ hostvars['proxmox']['cloud_init_password'] }}"
   args:
     executable: /bin/bash
 
 - name: Set cloud-init IP and gateway configuration
-  shell: qm set 132 --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }},gw={{ hostvars['proxmox']['cloud_init_gw'] }}"
+  shell: qm set 122 --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }},gw={{ hostvars['proxmox']['cloud_init_gw'] }}"
   args:
     executable: /bin/bash
 
@@ -52,6 +52,6 @@
     mode: '0644'
 
 - name: Set SSH public key for the VM using cloud-init
-  shell: qm set 132 --sshkey /root/ubuntu_key.pub
+  shell: qm set 122 --sshkey /root/ubuntu_key.pub
   args:
     executable: /bin/bash
