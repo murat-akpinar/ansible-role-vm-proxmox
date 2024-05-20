@@ -15,7 +15,7 @@
         executable: /bin/bash
 
     - name: Centos 7 Import disk to Proxmox
-      shell: qm importdisk 3514 /var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2c local-lvm
+      shell: qm importdisk 3514 /var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2 local-lvm
       args:
         executable: /bin/bash
 
