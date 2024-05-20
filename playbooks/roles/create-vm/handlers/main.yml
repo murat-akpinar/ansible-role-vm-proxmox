@@ -1,0 +1,17 @@
+---
+
+- name: Log Debian ISO copied
+  debug:
+    msg: "Debian ISO has been successfully copied from local files to Proxmox."
+
+- name: Log Debian ISO download
+  debug:
+    msg: "Debian ISO has been successfully downloaded from the internet to Proxmox."
+
+- name: Log Ubuntu ISO copied
+  debug:
+    msg: "Ubuntu ISO has been successfully copied from local files to Proxmox."
+
+- name: Log Ubuntu ISO download
+  debug:
+    msg: "Ubuntu ISO has been successfully downloaded from the internet to Proxmox."

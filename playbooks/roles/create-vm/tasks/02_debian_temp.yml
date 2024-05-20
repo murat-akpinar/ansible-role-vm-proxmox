@@ -8,17 +8,6 @@
   changed_when: false
 
 - block:
-    - name: Check if the Debian image is already downloaded
-      stat:
-        path: "/var/lib/vz/template/iso/debian-11-generic-amd64.qcow2"
-      register: debian_image
-
-    - name: Download Debian image
-      get_url:
-        url: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
-        dest: "/var/lib/vz/template/iso/debian-11-generic-amd64.qcow2"
-        timeout: 60
-      when: not debian_image.stat.exists
 
     - name: Create a new VM
       shell: qm create 452 --name debian11-template --memory 1024 --net0 virtio,bridge=vmbr0

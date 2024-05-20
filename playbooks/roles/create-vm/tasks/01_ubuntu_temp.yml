@@ -1,3 +1,4 @@
+# Ubuntu Template
 ---
 
 - name: Check if VM ID 121 exists
@@ -7,20 +8,9 @@
   changed_when: false
 
 - block:
-    - name: Check if the Ubuntu image is already downloaded
-      stat:
-        path: "/var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img"
-      register: Ubuntu_image
-
-    - name: Download Ubuntu image
-      get_url:
-        url: "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
-        dest: "/var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img"
-        timeout: 60
-      when: not Ubuntu_image.stat.exists
 
     - name: Create a new VM
-      shell: qm create 121 --name Ubuntu11-template --memory 1024 --net0 virtio,bridge=vmbr0
+      shell: qm create 121 --name Ubuntu-template --memory 1024 --net0 virtio,bridge=vmbr0
       args:
         executable: /bin/bash
 

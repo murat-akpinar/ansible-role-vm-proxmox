@@ -1,0 +1,47 @@
+- name: Define URLs for ISO images
+  set_fact:
+    debian_iso_url: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
+    ubuntu_iso_url: "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
+
+- name: Check for Debian ISO image on Proxmox
+  stat:
+    path: "/var/lib/vz/template/iso/debian-11-generic-amd64.qcow2"
+  register: debian_iso_stat
+
+- name: Copy Debian ISO from local files if present
+  copy:
+    src: "files/debian-11-generic-amd64.qcow2"
+    dest: "/var/lib/vz/template/iso/"
+  when: not debian_iso_stat.stat.exists
+  notify: Log Debian ISO copied
+
+- name: Download Debian ISO if not found locally or on Proxmox
+  get_url:
+    url: "{{ debian_iso_url }}"
+    dest: "/var/lib/vz/template/iso/debian-11-generic-amd64.qcow2"
+  when: not debian_iso_stat.stat.exists
+  notify: Log Debian ISO download
+
+- name: Check for Ubuntu ISO image on Proxmox
+  stat:
+    path: "/var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img"
+  register: ubuntu_iso_stat
+
+- name: Check if Ubuntu ISO is in local files
+  stat:
+    path: "files/jammy-server-cloudimg-amd64-disk-kvm.img"
+  register: local_ubuntu_iso
+
+- name: Copy Ubuntu ISO from local files if present
+  copy:
+    src: "files/jammy-server-cloudimg-amd64-disk-kvm.img"
+    dest: "/var/lib/vz/template/iso/"
+  when: not ubuntu_iso_stat.stat.exists
+  notify: Log Ubuntu ISO copied
+
+- name: Download Ubuntu ISO if not found locally or on Proxmox
+  get_url:
+    url: "{{ ubuntu_iso_url }}"
+    dest: "/var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img"
+  when: not ubuntu_iso_stat.stat.exists
+  notify: Log Ubuntu ISO download
