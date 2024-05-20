@@ -59,7 +59,7 @@
 
 - name: Download Centos7 ISO if not found locally or on Proxmox
   get_url:
-    url: "{{ ubuntu_iso_url }}"
+    url: "{{ centos_iso_url }}"
     dest: "/var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2"
   when: not centos_iso_stat.stat.exists
   notify: Log Centos7 ISO download
