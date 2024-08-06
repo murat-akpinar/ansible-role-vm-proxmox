@@ -1,6 +1,6 @@
 - name: Define URLs for ISO images
   set_fact:
-    debian_iso_url: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
+    debian_iso_url: "https://cloud.debian.org/images/cloud/bookworm/20230723-1450/debian-12-generic-amd64-20230723-1450.qcow2"
     ubuntu_iso_url: "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64-disk-kvm.img"
     centos_iso_url: "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2"
 
