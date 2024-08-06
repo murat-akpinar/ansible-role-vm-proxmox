@@ -1,8 +1,8 @@
 # Centos 7 Template
 ---
 
-- name: Check if VM ID 3514 exists
-  shell: qm list | grep -q ' 3514 '
+- name: Check if VM ID 300 exists
+  shell: qm list | grep -q ' 300 '
   register: vm_exists
   ignore_errors: true
   changed_when: false
@@ -10,32 +10,32 @@
 - block:
 
     - name: Centos 7 Create a new VM
-      shell: qm create 3514 --name centos7-template --memory 1024 --net0 virtio,bridge=vmbr0
+      shell: qm create 300 --name centos7-template --memory 1024 --net0 virtio,bridge=vmbr0
       args:
         executable: /bin/bash
 
     - name: Centos 7 Import disk to Proxmox
-      shell: qm importdisk 3514 /var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2 local-lvm
+      shell: qm importdisk 300 /var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2 local-lvm
       args:
         executable: /bin/bash
 
     - name: Centos 7 Set VM SCSI hardware
-      shell: qm set 3514 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-3514-disk-0
+      shell: qm set 300 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-300-disk-0
       args:
         executable: /bin/bash
 
     - name: Centos 7 Set cloud-init drive
-      shell: qm set 3514 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0
+      shell: qm set 300 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0
       args:
         executable: /bin/bash
 
     - name: Centos 7 Resize the disk
-      shell: qm resize 3514 scsi0 +8G
+      shell: qm resize 300 scsi0 +8G
       args:
         executable: /bin/bash
 
     - name: Centos 7 Convert VM to template
-      shell: qm template 3514
+      shell: qm template 300
       args:
         executable: /bin/bash
   when: vm_exists.rc != 0

@@ -6,28 +6,28 @@
 
 - name: Check for Debian ISO image on Proxmox
   stat:
-    path: "/var/lib/vz/template/iso/debian-11-generic-amd64.qcow2"
+    path: "/var/lib/vz/template/iso/debian-12-generic-amd64-20230723-1450.qcow2"
   register: debian_iso_stat
 
 - name: Copy Debian ISO from local files if present
   copy:
-    src: "files/debian-11-generic-amd64.qcow2"
+    src: "files/debian-12-generic-amd64-20230723-1450.qcow2"
     dest: "/var/lib/vz/template/iso/"
   ignore_errors: true
   when: not debian_iso_stat.stat.exists
   notify: Log Debian ISO copied
 
 - name: Download Debian ISO if not found locally or on Proxmox
-  get_url:
+  get_url:  
     url: "{{ debian_iso_url }}"
-    dest: "/var/lib/vz/template/iso/debian-11-generic-amd64.qcow2"
+    dest: "/var/lib/vz/template/iso/debian-12-generic-amd64-20230723-1450.qcow2"
   when: not debian_iso_stat.stat.exists
   notify: Log Debian ISO download
 
 - name: Check for Ubuntu ISO image on Proxmox
   stat:
     path: "/var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img"
-  register: ubuntu_iso_stat
+  register: ubuntu_iso_stat 
 
 - name: Copy Ubuntu ISO from local files if present
   copy:
@@ -44,22 +44,22 @@
   when: not ubuntu_iso_stat.stat.exists
   notify: Log Ubuntu ISO download
 
-- name: Check for Centos7 ISO image on Proxmox
-  stat:
-    path: "/var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2"
-  register: centos_iso_stat
+    # - name: Check for Centos7 ISO image on Proxmox
+    #   stat:
+    #     path: "/var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2"
+    #   register: centos_iso_stat
 
-- name: Copy Centos7 ISO from local files if present
-  copy:
-    src: "files/CentOS-7-x86_64-GenericCloud.qcow2"
-    dest: "/var/lib/vz/template/iso/"
-  ignore_errors: true
-  when: not centos_iso_stat.stat.exists
-  notify: Log Centos7 ISO copied
+# - name: Copy Centos7 ISO from local files if present
+#   copy:
+#     src: "files/CentOS-7-x86_64-GenericCloud.qcow2"
+#     dest: "/var/lib/vz/template/iso/"
+#   ignore_errors: true
+#   when: not centos_iso_stat.stat.exists
+#   notify: Log Centos7 ISO copied
 
-- name: Download Centos7 ISO if not found locally or on Proxmox
-  get_url:
-    url: "{{ centos_iso_url }}"
-    dest: "/var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2"
-  when: not centos_iso_stat.stat.exists
-  notify: Log Centos7 ISO download
+# - name: Download Centos7 ISO if not found locally or on Proxmox
+#   get_url:
+#     url: "{{ centos_iso_url }}"
+#     dest: "/var/lib/vz/template/iso/CentOS-7-x86_64-GenericCloud.qcow2"
+#   when: not centos_iso_stat.stat.exists
+#   notify: Log Centos7 ISO download

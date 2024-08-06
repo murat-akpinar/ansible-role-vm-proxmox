@@ -1,8 +1,8 @@
 # Ubuntu Template
 ---
 
-- name: Check if VM ID 121 exists
-  shell: qm list | grep -q ' 121 '
+- name: Check if VM ID   exists 
+  shell: qm list | grep -q ' 200 '
   register: vm_exists
   ignore_errors: true
   changed_when: false
@@ -10,32 +10,32 @@
 - block:
 
     - name: Ubuntu Create a new VM
-      shell: qm create 121 --name Ubuntu-template --memory 1024 --net0 virtio,bridge=vmbr0
+      shell: qm create 200 --name Ubuntu-template --memory 1024 --net0 virtio,bridge=vmbr0
       args:
         executable: /bin/bash
 
     - name: Ubuntu Import disk to Proxmox
-      shell: qm importdisk 121 /var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img local-lvm
+      shell: qm importdisk 200 /var/lib/vz/template/iso/jammy-server-cloudimg-amd64-disk-kvm.img local-lvm
       args:
         executable: /bin/bash
 
     - name: Ubuntu Set VM SCSI hardware
-      shell: qm set 121 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-121-disk-0
+      shell: qm set 200 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-200-disk-0
       args:
         executable: /bin/bash
 
     - name: Ubuntu Set cloud-init drive
-      shell: qm set 121 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0
+      shell: qm set 200 --ide2 local-lvm:cloudinit --boot c --bootdisk scsi0 --serial0 socket --vga serial0
       args:
         executable: /bin/bash
 
     - name: Ubuntu Resize the disk
-      shell: qm resize 121 scsi0 +8G
+      shell: qm resize 200 scsi0 +8G
       args:
         executable: /bin/bash
 
     - name: Ubuntu Convert VM to template
-      shell: qm template 121
+      shell: qm template 200
       args:
         executable: /bin/bash
   when: vm_exists.rc != 0

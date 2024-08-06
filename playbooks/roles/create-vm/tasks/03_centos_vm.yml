@@ -1,45 +1,45 @@
 # Centos 7 VM
 ---
 
-- name: Check if VM ID 3515 already exists
-  shell: qm list | grep -q ' 3515 '
+- name: Check if VM ID 301 already exists
+  shell: qm list | grep -q ' 301 '
   register: vm_exists
   ignore_errors: true
   changed_when: false
 
 - name: Centos 7 Clone VM from template if not exists
-  shell: qm clone 3514 3515 --name centos7 --full true
+  shell: qm clone 300 301 --name centos7 --full true
   args:
     executable: /bin/bash
   when: vm_exists.rc != 0
 
 - name: Centos 7 Notify VM already exists
   debug:
-    msg: "VM ID 3515 already exists, skipping clone."
+    msg: "VM ID 301 already exists, skipping clone."
   when: vm_exists.rc == 0
 
 - name: Centos 7 Set CPU Core and RAM
-  shell: "qm set 3515 --cores 1 --sockets 2 --memory 2048 --numa 1 --cpu host"
+  shell: "qm set 301 --cores 1 --sockets 2 --memory 2048 --numa 1 --cpu host"
   args:
     executable: /bin/bash
 
 - name: Centos 7 Set disk size
-  shell: "qm resize 3515 scsi0 +50G"
+  shell: "qm resize 301 scsi0 +50G"
   args:
     executable: /bin/bash
 
 - name: Centos 7 Set cloud-init user
-  shell: qm set 3515 --ciuser "{{ hostvars['proxmox']['cloud_init_user'] }}"
+  shell: qm set 301 --ciuser "{{ hostvars['proxmox']['cloud_init_user'] }}"
   args:
     executable: /bin/bash
 
 - name: Centos 7 Set cloud-init password
-  shell: qm set 3515 --cipassword "{{ hostvars['proxmox']['cloud_init_password'] }}"
+  shell: qm set 301 --cipassword "{{ hostvars['proxmox']['cloud_init_password'] }}"
   args:
     executable: /bin/bash
 
 - name: Centos 7 Set cloud-init IP and gateway configuration
-  shell: qm set 3515 --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }},gw={{ hostvars['proxmox']['cloud_init_gw'] }}"
+  shell: qm set 301 --ipconfig0 ip="{{ hostvars['proxmox']['cloud_init_ip'] }},gw={{ hostvars['proxmox']['cloud_init_gw'] }}"
   args:
     executable: /bin/bash
 
@@ -52,6 +52,6 @@
     mode: '0644'
 
 - name: Centos 7 Set SSH public key for the VM using cloud-init
-  shell: qm set 3515 --sshkey /root/centos_key.pub
+  shell: qm set 301 --sshkey /root/centos_key.pub
   args:
     executable: /bin/bash

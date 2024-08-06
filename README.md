@@ -5,7 +5,7 @@ Bu Ansible rolü, Proxmox üzerinde sanal makinelerin otomatik olarak oluşturul
 ## Özellikler
 
 - Ubuntu 22.04.4 LTS (Jammy Jellyfish) 
-- Debian 11  (bullseye)
+- Debian 12  (bullseye)
 
 ## Önkoşullar
 

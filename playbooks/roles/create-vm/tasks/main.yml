@@ -16,8 +16,8 @@
 - name: "Create A Debian VM" 
   ansible.builtin.import_tasks: 02_debian_vm.yml
 
-- name: "Create A Centos7 Template" 
-  ansible.builtin.import_tasks: 03_centos_temp.yml
+# - name: "Create A Centos7 Template" 
+#   ansible.builtin.import_tasks: 03_centos_temp.yml
 
-- name: "Create A Centos7 VM" 
-  ansible.builtin.import_tasks: 03_centos_vm.yml
+# - name: "Create A Centos7 VM" 
+#   ansible.builtin.import_tasks: 03_centos_vm.yml
