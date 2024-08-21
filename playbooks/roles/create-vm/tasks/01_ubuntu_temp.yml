@@ -30,7 +30,7 @@
         executable: /bin/bash
 
     - name: Ubuntu Resize the disk
-      shell: qm resize 200 scsi0 +8G
+      shell: qm resize 200 scsi0 +2868M
       args:
         executable: /bin/bash
 
